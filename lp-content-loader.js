@@ -128,46 +128,53 @@
 
   // ─── Fluxo principal ────────────────────────────────────────────────────────
 
-  if (placeholders.length === 0) {
-    reveal();
-    return;
+  function run() {
+    if (placeholders.length === 0) {
+      reveal();
+      return;
+    }
+
+    // Flag para evitar que timeout e fetch colidam.
+    var done  = false;
+
+    var timer = setTimeout(function () {
+      if (done) return;
+      done = true;
+      redirectToFallback();
+    }, TIMEOUT_MS);
+
+    var request = USE_MOCK
+      ? Promise.resolve(getMockData(placeholders))
+      : fetch(API_URL, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ keys: placeholders })
+        }).then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        });
+
+    request
+      .then(function (data) {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        applyContents(data);
+        reveal();
+      })
+      .catch(function (err) {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        console.error('[lp-content-loader] Falha ao carregar conteúdo:', err);
+        redirectToFallback();
+      });
   }
 
-  // Flag para evitar que timeout e fetch colidam.
-  var done  = false;
-
-  var timer = setTimeout(function () {
-    if (done) return;
-    done = true;
-    redirectToFallback();
-  }, TIMEOUT_MS);
-
-  var request = USE_MOCK
-    ? Promise.resolve(getMockData(placeholders))
-    : fetch(API_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ keys: placeholders })
-      }).then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-      });
-
-      console.log(request);
-
-  request
-    .then(function (data) {
-      if (done) return;
-      done = true;
-      clearTimeout(timer);
-      applyContents(data);
-      reveal();
-    })
-    .catch(function (err) {
-      if (done) return;
-      done = true;
-      clearTimeout(timer);
-      console.error('[lp-content-loader] Falha ao carregar conteúdo:', err);
-      redirectToFallback();
-    });
+  // Aguarda o DOM estar pronto (necessário quando carregado a partir do HEAD).
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
 })();
