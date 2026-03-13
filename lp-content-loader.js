@@ -32,7 +32,7 @@
     var result = {};
     keys.forEach(function (key) {
       if (key.indexOf('[imagem]') !== -1) {
-        result[key] = { type: 'html', content: '<img src="https://d335luupugsy2.cloudfront.net/cms/files/956090/1767797638/$egvhft1n2fd" alt="[mock] ' + key + '">' };
+        result[key] = { type: 'html', content: '<img src="https://d335luupugsy2.cloudfront.net/cms/files/956090/1767797638/$egvhft1n2fd" alt="[mocks] ' + key + '">' };
       } else if (key.indexOf('[valor]') !== -1) {
         result[key] = { type: 'text', content: 'R$ 99,90/mês [mock: ' + key + ']' };
       } else if (key.indexOf('[titulo]') !== -1) {
