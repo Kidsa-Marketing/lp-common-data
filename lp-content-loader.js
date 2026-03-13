@@ -143,8 +143,12 @@
       redirectToFallback();
     }, TIMEOUT_MS);
 
+    var MOCK_DELAY_MS = 2000; // remover após testes
+
     var request = USE_MOCK
-      ? Promise.resolve(getMockData(placeholders))
+      ? new Promise(function (resolve) {
+          setTimeout(function () { resolve(getMockData(placeholders)); }, MOCK_DELAY_MS);
+        })
       : fetch(API_URL, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
