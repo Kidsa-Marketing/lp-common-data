@@ -31,15 +31,15 @@
   function getMockData(keys) {
     var result = {};
     keys.forEach(function (key) {
-      if (key.indexOf('imagem') !== -1) {
+      if (key.indexOf('[imagem]') !== -1) {
         result[key] = { type: 'html', content: '<img src="https://placehold.co/400x200?text=' + key + '" alt="[mock] ' + key + '">' };
-      } else if (key.indexOf('valor') !== -1) {
+      } else if (key.indexOf('[valor]') !== -1) {
         result[key] = { type: 'text', content: 'R$ 99,90/mês [mock: ' + key + ']' };
-      } else if (key.indexOf('titulo') !== -1) {
+      } else if (key.indexOf('[titulo]') !== -1) {
         result[key] = { type: 'html', content: '<strong>[mock] Título de teste para <em>' + key + '</em></strong>' };
-      } else if (key.indexOf('descricao') !== -1) {
+      } else if (key.indexOf('[descricao]') !== -1) {
         result[key] = { type: 'text', content: '[mock] Descrição de teste para a chave "' + key + '". Aqui vai um texto mais longo para simular um parágrafo real.' };
-      } else if (key.indexOf('texto') !== -1) {
+      } else if (key.indexOf('[texto]') !== -1) {
         result[key] = { type: 'text', content: '[mock] Texto de teste para a chave "' + key + '".' };
       } else {
         result[key] = { type: 'text', content: '[mock: ' + key + ']' };
@@ -70,7 +70,7 @@
   function applyContents(data) {
     Object.keys(data).forEach(function (key) {
       var obj         = data[key];
-      var placeholder = '[' + key + ']';
+      var placeholder = key;
       var content     = (obj && obj.content != null) ? String(obj.content) : '';
       var isHtml      = obj && obj.type === 'html';
 
