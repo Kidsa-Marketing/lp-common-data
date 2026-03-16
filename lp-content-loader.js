@@ -29,20 +29,20 @@
   var USE_MOCK = true;
 
   function getMockData(keys) {
+    var data = window.__LP_DATA || {};
     var result = {};
     keys.forEach(function (key) {
-      if (key.indexOf('[imagem]') !== -1) {
-        result[key] = { type: 'html', content: '<img src="https://d335luupugsy2.cloudfront.net/cms/files/956090/1767797638/$egvhft1n2fd" alt="[mocks] ' + key + '">' };
-      } else if (key.indexOf('[valor]') !== -1) {
-        result[key] = { type: 'text', content: 'R$ 99,90/mês [mock: ' + key + ']' };
-      } else if (key.indexOf('[titulo]') !== -1) {
-        result[key] = { type: 'html', content: '<strong>[mock] Título de teste para <em>' + key + '</em></strong>' };
-      } else if (key.indexOf('[descricao]') !== -1) {
-        result[key] = { type: 'text', content: '[mock] Descrição de teste para a chave "' + key + '". Aqui vai um texto mais longo para simular um parágrafo real.' };
-      } else if (key.indexOf('[texto]') !== -1) {
-        result[key] = { type: 'text', content: '[mock] Texto de teste para a chave "' + key + '".' };
+      var value = data[key];
+      if (value !== undefined) {
+        if (key.indexOf('[imagem]') !== -1) {
+          result[key] = { type: 'html', content: '<img src="' + value + '" alt="' + key + '">' };
+        } else if (key.indexOf('[titulo]') !== -1) {
+          result[key] = { type: 'html', content: '<strong>' + value + '</strong>' };
+        } else {
+          result[key] = { type: 'text', content: value };
+        }
       } else {
-        result[key] = { type: 'text', content: '[mock: ' + key + ']' };
+        result[key] = { type: 'text', content: '[sem dados: ' + key + ']' };
       }
     });
     return result;
@@ -142,8 +142,6 @@
       done = true;
       redirectToFallback();
     }, TIMEOUT_MS);
-
-    var MOCK_DELAY_MS = 2000; // remover após testes
 
     var request = USE_MOCK
       ? new Promise(function (resolve) {
