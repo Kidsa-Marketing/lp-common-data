@@ -26,17 +26,29 @@
   var TIMEOUT_MS = 4000; // ms até redirecionar para fallback se a API não responder
 
   // ─── MOCK (remover quando o endpoint estiver no ar) ─────────────────────────
-  var USE_MOCK = true;
+  var USE_MOCK      = true;
+  var MOCK_DATA_URL = 'https://kidsa-marketing.github.io/lp-common-data/lp-data.js';
+
+  function loadMockData() {
+    return new Promise(function (resolve, reject) {
+      if (window.__LP_DATA) { resolve(); return; }
+      var s    = document.createElement('script');
+      s.src    = MOCK_DATA_URL;
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error('Falha ao carregar lp-data.js')); };
+      (document.head || document.documentElement).appendChild(s);
+    });
+  }
 
   function getMockData(keys) {
-    var data = window.__LP_DATA || {};
+    var data   = window.__LP_DATA || {};
     var result = {};
     keys.forEach(function (key) {
       var value = data[key];
       if (value !== undefined) {
-        if (key.indexOf('[imagem]') !== -1) {
+        if (key.indexOf('imagem') !== -1) {
           result[key] = { type: 'html', content: '<img src="' + value + '" alt="' + key + '">' };
-        } else if (key.indexOf('[titulo]') !== -1) {
+        } else if (key.indexOf('titulo') !== -1) {
           result[key] = { type: 'html', content: '<strong>' + value + '</strong>' };
         } else {
           result[key] = { type: 'text', content: value };
@@ -144,9 +156,7 @@
     }, TIMEOUT_MS);
 
     var request = USE_MOCK
-      ? new Promise(function (resolve) {
-          setTimeout(function () { resolve(getMockData(placeholders)); }, MOCK_DELAY_MS);
-        })
+      ? loadMockData().then(function () { return getMockData(placeholders); })
       : fetch(API_URL, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
