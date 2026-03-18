@@ -84,7 +84,7 @@
   function applyContents(data) {
     Object.keys(data).forEach(function (key) {
       var obj         = data[key];
-      var placeholder = key;
+      var placeholder = '[' + key + ']'; 
       var content     = (obj && obj.content != null) ? String(obj.content) : '';
       var isHtml      = obj && obj.type === 'html';
 
@@ -155,7 +155,7 @@
     fetch(API_URL, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ keys: placeholders })
+      body:    JSON.stringify({ keys: placeholders.map(function(k) { return k.replace(/[\[\]]/g, ''); }) })
     })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
