@@ -109,3 +109,8 @@ html.lp-loading body {
 body {
     transition: opacity 0.25s ease;
 }
+
+img[alt="imagem-turma-1"] {
+  width: 100%;
+  max-width: 400px;
+}

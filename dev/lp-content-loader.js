@@ -61,7 +61,7 @@
   'use strict';
 
   // ─── Configuração ───────────────────────────────────────────────────────────
-  var API_URL    = 'https://marketta-subtractive-geoffrey.ngrok-free.dev/rdStationIntegration/contents';
+  var API_URL    = 'https://marketta-subtractive-geoffrey.ngrok-free.dev/landingPages/contents';
   var TIMEOUT_MS = 4000;
 
   var config       = window.__LP_CONFIG || {};
@@ -161,7 +161,7 @@
     fetch(API_URL, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ keys: placeholders.map(function(k) { return k.replace(/[\[\]]/g, ''); }) })
+      body:    JSON.stringify({rd_url: config.rd_url, keys: placeholders.map(function(k) { return k.replace(/[\[\]]/g, ''); }) })
     })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
