@@ -87,6 +87,12 @@
       var placeholder = '[' + key + ']'; 
       var content     = (obj && obj.content != null) ? String(obj.content) : '';
       var isHtml      = obj && obj.type === 'html';
+      var isImg   = obj && obj.type === 'img';
+
+      if (isImg) {
+        content = '<img src="' + content + '" alt="' + key + '">';
+        isHtml  = true;
+      }
 
       var walker = document.createTreeWalker(
         document.body,
