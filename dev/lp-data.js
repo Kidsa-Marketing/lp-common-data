@@ -7,11 +7,11 @@
  * Cada chave entre colchetes corresponde a um trecho de texto na LP.
  *
  * Tipos de conteúdo disponíveis:
- *   texto   → texto simples
- *   titulo  → texto em negrito
+ *   texto     → texto simples
+ *   titulo    → texto em negrito
  *   descricao → parágrafo de texto
- *   valor   → preço (ex: R$ 79,90/mês)
- *   imagem  → URL da imagem (copie o link da imagem do RD Station)
+ *   valor     → preço (ex: R$ 79,90/mês)
+ *   imagem    → URL da imagem (copie o link da imagem do RD Station)
  *
  * ⚠️  Se alterar o nome de uma chave (ex: '[titulo]'), atualize também na lista de placeholders do HEAD de cada LP que a usa.
  * ⚠️  Mantenha as aspas e vírgulas no lugar certo.
