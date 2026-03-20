@@ -100,7 +100,8 @@
         var embedId = videoId ? videoId[1] : null;
         if (embedId) {
           content = '<iframe src="https://www.youtube.com/embed/' + embedId + '"'
-            + ' width="560" height="315" frameborder="0"'
+            + ' width="100%" height="100%" frameborder="0"'
+            + ' style="display:block;aspect-ratio:16/9;"'
             + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"'
             + ' allowfullscreen></iframe>';
         }
