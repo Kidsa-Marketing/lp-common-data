@@ -66,7 +66,7 @@
 
   var config       = window.__LP_CONFIG || {};
   var placeholders = config.placeholders || [];
-  var fallbackUrl  = config.fallbackUrl  || 'https://www.kidsa.com.br/planos';
+  var fallbackUrl  = config.fallbackUrl  || 'https://kidsa.com';
 
   function reveal() {
     document.documentElement.classList.remove('lp-loading');
