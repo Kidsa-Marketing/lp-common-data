@@ -87,11 +87,24 @@
       var placeholder = '[' + key + ']'; 
       var content     = (obj && obj.content != null) ? String(obj.content) : '';
       var isHtml      = obj && obj.type === 'html';
-      var isImg   = obj && obj.type === 'img';
+      var isImg       = obj && obj.type === 'img';
+      var isVideo     = obj && obj.type === 'video';
 
       if (isImg) {
         content = '<img src="' + content + '" alt="' + key + '">';
         isHtml  = true;
+      }
+
+      if (isVideo) {
+        var videoId = content.match(/youtu\.be\/([^?&]+)/);
+        var embedId = videoId ? videoId[1] : null;
+        if (embedId) {
+          content = '<iframe src="https://www.youtube.com/embed/' + embedId + '"'
+            + ' width="560" height="315" frameborder="0"'
+            + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"'
+            + ' allowfullscreen></iframe>';
+        }
+        isHtml = true;
       }
 
       var walker = document.createTreeWalker(
