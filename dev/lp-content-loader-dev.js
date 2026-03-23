@@ -61,7 +61,7 @@
   'use strict';
 
   // ─── Configuração ───────────────────────────────────────────────────────────
-  var API_URL    = 'https://api.kidsa.com/landingPages/contents';
+  var API_URL    = 'https://api-dev.kidsa.com/landingPages/contents';
   var TIMEOUT_MS = 4000;
 
   var config       = window.__LP_CONFIG || {};
