@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var formConfig = (window.__LP_CONFIG && window.__LP_CONFIG.form) || {};
   var product    = formConfig.product  || '14';
   var campaign   = formConfig.campaign || 'kidsa-indicacao';
+  var fields     = formConfig.fields   || {};
+  var customParams = formConfig.customParams || {};
+
 
   // Textos padrão dos botões de submit usados nas LPs.
   // Para sobrescrever em uma LP específica, defina window.__LP_CONFIG.form.buttonTexts.
@@ -52,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // ─── Parâmetros de URL ──────────────────────────────────────────────────────
   var urlParams = new URLSearchParams(window.location.search);
   var normalize = function (p) { return p || 'undefined'; };
-  var idAluno   = normalize(urlParams.get('from'));
 
   // ─── Botão de submit ────────────────────────────────────────────────────────
   var submitButton = null;
@@ -73,15 +75,38 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    window.location.href = 'https://futuro.kidsa.com/?layout=course' +
-      '&email='    + encodeURIComponent(emailField   ? emailField.value.trim()   : '') +
-      '&name='     + encodeURIComponent(nameField    ? nameField.value.trim()    : '') +
-      '&phone='    + encodeURIComponent(mobilePhone.value.trim()) +
-      '&child='    + encodeURIComponent(childField   ? childField.value.trim()   : '') +
-      '&birthday=' + encodeURIComponent(birthdayField ? birthdayField.value.trim() : '') +
-      '&campaign=' + encodeURIComponent(campaign) +
-      '&product='  + encodeURIComponent(product) +
-      '&from='     + encodeURIComponent(idAluno);
+    // ─── Parâmetros fixos ───────────────────────────────────────────────────
+    var url = 'https://futuro.kidsa.com/?layout=course'
+      + '&email='    + encodeURIComponent(emailField   ? emailField.value.trim()  : '')
+      + '&name='     + encodeURIComponent(nameField    ? nameField.value.trim()   : '')
+      + '&phone='    + encodeURIComponent(mobilePhone.value.trim())
+      + '&campaign=' + encodeURIComponent(campaign)
+      + '&product='  + encodeURIComponent(product);
+
+    // ─── Parâmetros opcionais via fields ────────────────────────────────────
+    if (fields.child) {
+      url += '&child=' + encodeURIComponent(childField ? childField.value.trim() : '');
+    }
+    if (fields.birthday) {
+      url += '&birthday=' + encodeURIComponent(birthdayField ? birthdayField.value.trim() : '');
+    }
+    if (fields.from) {
+      url += '&from=' + encodeURIComponent(normalize(urlParams.get('from')));
+    }
+    if (fields.utms) {
+      url += '&utm_source='   + encodeURIComponent(normalize(urlParams.get('utm_source')))
+           + '&utm_campaign=' + encodeURIComponent(normalize(urlParams.get('utm_campaign')))
+           + '&utm_term='     + encodeURIComponent(normalize(urlParams.get('utm_term')))
+           + '&utm_medium='   + encodeURIComponent(normalize(urlParams.get('utm_medium')))
+           + '&utm_content='  + encodeURIComponent(normalize(urlParams.get('utm_content')));
+    }
+
+    // ─── Parâmetros customizados ─────────────────────────────────────────────
+    Object.keys(customParams).forEach(function (key) {
+      url += '&' + key + '=' + encodeURIComponent(customParams[key]);
+    });
+
+    window.location.href = url;
   });
 
   Object.defineProperty(submitButton, 'myListenerAdded', { value: true, writable: false });
