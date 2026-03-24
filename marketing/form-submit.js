@@ -17,16 +17,11 @@
 document.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  console.log('[form-submit] Iniciando...');
-  console.log('[form-submit] __LP_CONFIG:', window.__LP_CONFIG);
-
   var formConfig = (window.__LP_CONFIG) || {};
   var product    = formConfig.params.product  || '14';
   var campaign   = formConfig.params.campaign || 'kidsa-indicacao';
   var customParams = formConfig.customParams || {};
 
-  console.log('[form-submit] product:', product);
-  console.log('[form-submit] campaign:', campaign);
 
   // Textos padrão dos botões de submit usados nas LPs.
   // Para sobrescrever em uma LP específica, defina window.__LP_CONFIG.formConfig.buttonTexts.
@@ -72,15 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-    console.log('[form-submit] submitButton encontrado:', !!submitButton);
-
   if (!submitButton || submitButton.myListenerAdded) return;
 
   submitButton.addEventListener('click', function (event) {
     event.preventDefault();
-
-    console.log('[form-submit] Botão clicado.');
-
 
     if (!window.__phoneValidation(mobilePhone.value.trim())) {
       var msg = document.querySelector('.validation-message');
@@ -134,10 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
       url += '&' + key + '=' + encodeURIComponent(customParams[key]);
     });
 
-    console.log('Mobile Phone:', mobilePhone.value.trim());
-    console.log('childField:', childField ? childField.value.trim() : 'N/A');
-    console.log('Birthday Field:', birthdayField ? birthdayField.value.trim() : 'N/A');
-    console.log('Redirecting to URL:', url);
 
     window.location.href = url;
   });
