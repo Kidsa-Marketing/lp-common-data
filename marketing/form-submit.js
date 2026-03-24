@@ -17,26 +17,29 @@
 document.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  var formConfig = (window.__LP_CONFIG && window.__LP_CONFIG.form) || {};
-  var product    = formConfig.product  || '14';
-  var campaign   = formConfig.campaign || 'kidsa-indicacao';
-  var fields     = formConfig.fields   || {};
+  var formConfig = (window.__LP_CONFIG) || {};
+  var product    = formConfig.params.product  || '14';
+  var campaign   = formConfig.params.campaign || 'kidsa-indicacao';
   var customParams = formConfig.customParams || {};
 
 
   // Textos padrão dos botões de submit usados nas LPs.
-  // Para sobrescrever em uma LP específica, defina window.__LP_CONFIG.form.buttonTexts.
+  // Para sobrescrever em uma LP específica, defina window.__LP_CONFIG.formConfig.buttonTexts.
   var buttonTexts = formConfig.buttonTexts || [
     'QUERO FINALIZAR A INSCRIÇÃO!',
     'Iniciar Agora ➤'
   ];
 
   // ─── Campos do formulário ───────────────────────────────────────────────────
-  var mobilePhone  = document.querySelector('[name="cf_whatsapp_com_ddd_do_responsavel"]');
-  var nameField    = document.querySelector('[name="name"]');
-  var emailField   = document.querySelector('[name="email"]');
-  var childField   = document.querySelector('[name="cf_nome_da_crianca"]');
-  var birthdayField = document.querySelector('[name="cf_data_de_nascimento_da_crianca"]');
+  var mobilePhone  = document.querySelector(formConfig.formFields.ffMobilePhone);
+  var nameField    = document.querySelector(formConfig.formFields.ffNameField);
+  var emailField   = document.querySelector(formConfig.formFields.ffEmailField);
+  if (formConfig.formFields.ffChildField){
+    var childField   = document.querySelector(formConfig.formFields.ffChildField);
+  }
+  if (formConfig.formFields.ffBirthdayField){
+    var birthdayField = document.querySelector(formConfig.formFields.ffBirthdayField);
+  }
 
   if (!mobilePhone) return;
 
@@ -84,21 +87,36 @@ document.addEventListener('DOMContentLoaded', function () {
       + '&product='  + encodeURIComponent(product);
 
     // ─── Parâmetros opcionais via fields ────────────────────────────────────
-    if (fields.child) {
-      url += '&child=' + encodeURIComponent(childField ? childField.value.trim() : '');
+    if (childField) {
+      url += '&child=' + encodeURIComponent(childField.value.trim());
     }
-    if (fields.birthday) {
-      url += '&birthday=' + encodeURIComponent(birthdayField ? birthdayField.value.trim() : '');
+
+    if (birthdayField) {
+      url += '&birthday=' + encodeURIComponent(birthdayField.value.trim());
     }
-    if (fields.from) {
-      url += '&from=' + encodeURIComponent(normalize(urlParams.get('from')));
+
+    if (urlParams.has('from')) {
+      url +=  '&from=' + encodeURIComponent(normalize(urlParams.get('from')));
     }
-    if (fields.utms) {
-      url += '&utm_source='   + encodeURIComponent(normalize(urlParams.get('utm_source')))
-           + '&utm_campaign=' + encodeURIComponent(normalize(urlParams.get('utm_campaign')))
-           + '&utm_term='     + encodeURIComponent(normalize(urlParams.get('utm_term')))
-           + '&utm_medium='   + encodeURIComponent(normalize(urlParams.get('utm_medium')))
-           + '&utm_content='  + encodeURIComponent(normalize(urlParams.get('utm_content')));
+
+    if (urlParams.has('utm_source')) {
+      url += '&utm_source=' + encodeURIComponent(normalize(urlParams.get('utm_source')));
+    }
+
+    if (urlParams.has('utm_medium')) {
+      url += '&utm_medium=' + encodeURIComponent(normalize(urlParams.get('utm_medium')));
+    }
+
+    if (urlParams.has('utm_campaign')) {
+      url += '&utm_campaign=' + encodeURIComponent(normalize(urlParams.get('utm_campaign')));
+    }
+
+    if (urlParams.has('utm_content')) {
+      url += '&utm_content=' + encodeURIComponent(normalize(urlParams.get('utm_content')));
+    }
+
+    if (urlParams.has('utm_term')) {
+      url += '&utm_term=' + encodeURIComponent(normalize(urlParams.get('utm_term')));
     }
 
     // ─── Parâmetros customizados ─────────────────────────────────────────────
