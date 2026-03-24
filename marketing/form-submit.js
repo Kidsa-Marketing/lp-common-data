@@ -124,6 +124,11 @@ document.addEventListener('DOMContentLoaded', function () {
       url += '&' + key + '=' + encodeURIComponent(customParams[key]);
     });
 
+    console.log('Mobile Phone:', mobilePhone.value.trim());
+    console.log('childField:', childField ? childField.value.trim() : 'N/A');
+    console.log('Birthday Field:', birthdayField ? birthdayField.value.trim() : 'N/A');
+    console.log('Redirecting to URL:', url);
+
     window.location.href = url;
   });
 
