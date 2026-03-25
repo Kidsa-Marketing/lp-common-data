@@ -96,7 +96,8 @@
       }
 
       if (isVideo) {
-        var videoId = content.match(/youtu\.be\/([^?&]+)/);
+        var videoId = content.match(/youtu\.be\/([^?&]+)/) ||
+                      content.match(/youtube\.com\/watch\?v=([^&]+)/);
         var embedId = videoId ? videoId[1] : null;
         if (embedId) {
           content = '<iframe src="https://www.youtube.com/embed/' + embedId + '"'
