@@ -17,6 +17,8 @@
 document.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
+  console.log('[form-submit] Iniciando...');
+
   var formConfig = (window.__LP_CONFIG) || {};
   var product    = formConfig.params.product  || '14';
   var campaign   = formConfig.params.campaign || 'kidsa-indicacao';
@@ -41,7 +43,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var birthdayField = document.querySelector(formConfig.formFields.ffBirthdayField);
   }
 
-  if (!mobilePhone) return;
+  if (!mobilePhone) {
+    console.warn('[form-submit] Campo de telefone não encontrado. Script encerrado.');
+    return;
+  }
 
   // ─── Configura campo de telefone ───────────────────────────────────────────
   mobilePhone.setAttribute('maxLength', '11');
@@ -62,15 +67,24 @@ document.addEventListener('DOMContentLoaded', function () {
   // ─── Botão de submit ────────────────────────────────────────────────────────
   var submitButton = null;
   document.querySelectorAll('form button').forEach(function (btn) {
+    console.log('[form-submit] Botão encontrado:', btn.textContent.trim());
     if (!submitButton && buttonTexts.indexOf(btn.textContent.trim()) !== -1) {
       submitButton = btn;
     }
   });
 
-  if (!submitButton || submitButton.myListenerAdded) return;
+  console.log('[form-submit] submitButton encontrado:', !!submitButton);
+  console.log('[form-submit] buttonTexts:', buttonTexts);
+
+  if (!submitButton || submitButton.myListenerAdded) {
+    console.warn('[form-submit] Botão não encontrado ou listener já adicionado.');
+    return;
+  }
 
   submitButton.addEventListener('click', function (event) {
     event.preventDefault();
+    console.log('[form-submit] Botão clicado.');
+
 
     if (!window.__phoneValidation(mobilePhone.value.trim())) {
       var msg = document.querySelector('.validation-message');
@@ -123,6 +137,8 @@ document.addEventListener('DOMContentLoaded', function () {
     Object.keys(customParams).forEach(function (key) {
       url += '&' + key + '=' + encodeURIComponent(customParams[key]);
     });
+
+     console.log('[form-submit] Redirecting to URL:', url);
 
 
     window.location.href = url;
