@@ -69,6 +69,7 @@
   var fallbackUrl  = config.fallbackUrl  || 'https://kidsa.com';
 
   function reveal() {
+    document.body.offsetHeight;
     document.documentElement.classList.remove('lp-loading');
   }
 
