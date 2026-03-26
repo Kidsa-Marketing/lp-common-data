@@ -70,10 +70,12 @@
 
   function reveal() {
     document.body.offsetHeight;
+    document.documentElement.style.visibility = 'visible';// teste
     document.documentElement.classList.remove('lp-loading');
   }
 
   function redirectToFallback() {
+    document.documentElement.style.visibility = 'visible';// teste
     window.location.replace(fallbackUrl);
   }
 
