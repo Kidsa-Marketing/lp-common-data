@@ -99,6 +99,10 @@ document.addEventListener('DOMContentLoaded', function () {
       url +=  '&from=' + encodeURIComponent(normalize(urlParams.get('from')));
     }
 
+    if (urlParams.has('ref')) {
+      url += '&ref=' + encodeURIComponent(normalize(urlParams.get('ref')));
+    }
+
     if (urlParams.has('utm_source')) {
       url += '&utm_source=' + encodeURIComponent(normalize(urlParams.get('utm_source')));
     }
