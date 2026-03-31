@@ -3,13 +3,20 @@
  *
  * Depende de phone-validation.js (deve ser carregado antes).
  *
- * Configuração por LP via window.__LP_CONFIG.form (opcional):
+ * Configuração por LP via window.__LP_CONFIG:
  *   window.__LP_CONFIG = {
- *     ...
- *     form: {
+ *     params: {
  *       product:  '14',              // ID do produto no futuro.kidsa (obrigatório por LP)
- *       campaign: 'kidsa-indicacao'  // slug da campanha (padrão: 'kidsa-indicacao')
- *     }
+ *       campaign: 'kidsa-indicacao'  // slug da campanha
+ *     },
+ *     formFields: {
+ *       ffMobilePhone:   '[name="cf_whatsapp_com_ddd_do_responsavel"]',
+ *       ffNameField:     '[name="name"]',
+ *       ffEmailField:    '[name="email"]',
+ *       ffChildField:    '[name="cf_nome_da_crianca"]',    // opcional
+ *       ffBirthdayField: '[name="cf_data_de_nascimento_da_crianca"]' // opcional
+ *     },
+ *     customParams: {}  // opcional
  *   };
  *
  * Como usar: carregue no BODY da LP, após phone-validation.js.
@@ -55,9 +62,23 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   window.__addValidationMessage(mobilePhone);
 
-  // ─── Parâmetros de URL ──────────────────────────────────────────────────────
+  // ─── Captura e persiste from/ref ────────────────────────────────────────────
   var urlParams = new URLSearchParams(window.location.search);
   var normalize = function (p) { return p || 'undefined'; };
+
+  var fromValue = urlParams.get('from');
+  var refValue  = urlParams.get('ref');
+
+  if (fromValue) {
+    localStorage.setItem('idInflu', fromValue);
+    localStorage.setItem('idInfluType', 'from');
+  } else if (refValue) {
+    localStorage.setItem('idInflu', refValue);
+    localStorage.setItem('idInfluType', 'ref');
+  }
+
+  var savedValue = localStorage.getItem('idInflu');
+  var savedType  = localStorage.getItem('idInfluType') || 'ref';
 
   // ─── Botão de submit ────────────────────────────────────────────────────────
   var submitButton = null;
@@ -94,15 +115,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (birthdayField) {
       url += '&birthday=' + encodeURIComponent(birthdayField.value.trim());
     }
-
-    if (urlParams.has('from')) {
-      url +=  '&from=' + encodeURIComponent(normalize(urlParams.get('from')));
+    // ─── from / ref (com persistência via localStorage) ─────────────────────
+    if (savedValue) {
+      url += '&' + savedType + '=' + encodeURIComponent(savedValue);
     }
 
-    if (urlParams.has('ref')) {
-      url += '&ref=' + encodeURIComponent(normalize(urlParams.get('ref')));
-    }
-
+    // ─── UTMs ───────────────────────────────────────────────────────────────
     if (urlParams.has('utm_source')) {
       url += '&utm_source=' + encodeURIComponent(normalize(urlParams.get('utm_source')));
     }
