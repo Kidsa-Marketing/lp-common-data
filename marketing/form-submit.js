@@ -66,19 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var urlParams = new URLSearchParams(window.location.search);
   var normalize = function (p) { return p || 'undefined'; };
 
-  var fromValue = urlParams.get('from');
-  var refValue  = urlParams.get('ref');
+  var fromValue = urlParams.get('from') || urlParams.get('ref');
 
   if (fromValue) {
     localStorage.setItem('idInflu', fromValue);
-    localStorage.setItem('idInfluType', 'from');
-  } else if (refValue) {
-    localStorage.setItem('idInflu', refValue);
-    localStorage.setItem('idInfluType', 'ref');
   }
 
   var savedValue = localStorage.getItem('idInflu');
-  var savedType  = localStorage.getItem('idInfluType') || 'ref';
 
   // ─── Botão de submit ────────────────────────────────────────────────────────
   var submitButton = null;
@@ -117,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // ─── from / ref (com persistência via localStorage) ─────────────────────
     if (savedValue) {
-      url += '&' + savedType + '=' + encodeURIComponent(savedValue);
+      url += '&from=' + encodeURIComponent(savedValue);
     }
 
     // ─── UTMs ───────────────────────────────────────────────────────────────
