@@ -48,6 +48,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var birthdayField = document.querySelector(formConfig.formFields.ffBirthdayField);
   }
 
+  // ─── Configura campo de aniversário ────────────────────────────────────────
+  if (birthdayField) {
+    birthdayField.setAttribute('maxLength', '10');
+    birthdayField.addEventListener('blur', function (event) {
+      var v = event.target.value.replace(/\D/g, '');
+      if (v.length >= 8) {
+        event.target.value = v.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
+      }
+    });
+  }
+
   if (!mobilePhone) return;
 
   // ─── Configura campo de telefone ───────────────────────────────────────────
