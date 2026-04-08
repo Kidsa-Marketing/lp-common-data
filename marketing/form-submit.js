@@ -51,11 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // ─── Configura campo de aniversário ────────────────────────────────────────
   if (birthdayField) {
     birthdayField.setAttribute('maxLength', '10');
-    birthdayField.addEventListener('blur', function (event) {
+    birthdayField.addEventListener('input', function (event) {
       var v = event.target.value.replace(/\D/g, '');
-      if (v.length >= 8) {
-        event.target.value = v.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
-      }
+      if (v.length > 4) v = v.replace(/^(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
+      else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,2})/, '$1/$2');
+      event.target.value = v;
     });
   }
 
