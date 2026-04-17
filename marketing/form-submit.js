@@ -8,6 +8,7 @@
  *     params: {
  *       product:  '14',              // ID do produto no futuro.kidsa (obrigatório por LP)
  *       campaign: 'kidsa-indicacao'  // slug da campanha
+ *       checkoutUrl: 'https://homolog.futuro.kidsa.com', // ← adiciona isso se for para o futuro.kidsa de homologação
  *     },
  *     formFields: {
  *       ffMobilePhone:   '[name="cf_whatsapp_com_ddd_do_responsavel"]',
@@ -105,7 +106,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ─── Parâmetros fixos ───────────────────────────────────────────────────
-    var url = 'https://futuro.kidsa.com/?layout=course'
+    var checkoutUrl = formConfig.params.checkoutUrl || 'https://futuro.kidsa.com';
+
+    var url = checkoutUrl + '/?layout=course'
       + '&email='    + encodeURIComponent(emailField   ? emailField.value.trim()  : '')
       + '&name='     + encodeURIComponent(nameField    ? nameField.value.trim()   : '')
       + '&phone='    + encodeURIComponent(mobilePhone.value.trim())
