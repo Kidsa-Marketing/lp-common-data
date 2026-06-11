@@ -15,7 +15,9 @@
  *       ffNameField:     '[name="name"]',
  *       ffEmailField:    '[name="email"]',
  *       ffChildField:    '[name="cf_nome_da_crianca"]',    // opcional
- *       ffBirthdayField: '[name="cf_data_de_nascimento_da_crianca"]' // opcional
+ *       ffBirthdayField: '[name="cf_data_de_nascimento_da_crianca"]',      // opcional
+ *       ffEscolaNome:     '[name="cf_escola_nome"]',                        // opcional
+ *       ffEscolaTelefone: '[name="cf_escola_telefone"]',                    // opcional
  *     },
  *     customParams: {}  // opcional
  *   };
@@ -47,6 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   if (formConfig.formFields.ffBirthdayField){
     var birthdayField = document.querySelector(formConfig.formFields.ffBirthdayField);
+  }
+  if (formConfig.formFields.ffEscolaNome) {
+    var escolaNomeField = document.querySelector(formConfig.formFields.ffEscolaNome);
+  }
+  if (formConfig.formFields.ffEscolaTelefone) {
+    var escolaTelefoneField = document.querySelector(formConfig.formFields.ffEscolaTelefone);
   }
 
   // ─── Configura campo de aniversário ────────────────────────────────────────
@@ -123,6 +131,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (birthdayField) {
       url += '&birthday=' + encodeURIComponent(birthdayField.value.trim());
     }
+
+    if (escolaNomeField) {
+      url += '&escola_nome=' + encodeURIComponent(escolaNomeField.value.trim());
+    }
+    
+    if (escolaTelefoneField) {
+      url += '&escola_telefone=' + encodeURIComponent(escolaTelefoneField.value.trim());
+    }
+
     // ─── from / ref (com persistência via localStorage) ─────────────────────
     if (savedValue) {
       url += '&from=' + encodeURIComponent(savedValue);
