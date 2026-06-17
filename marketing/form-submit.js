@@ -9,6 +9,7 @@
  *       product:  '14',              // ID do produto no futuro.kidsa (obrigatório por LP)
  *       campaign: 'kidsa-indicacao'  // slug da campanha
  *       checkoutUrl: 'https://homolog.futuro.kidsa.com', // ← adiciona isso se for para o futuro.kidsa de homologação
+ *       leadApiUrl: 'https://api.kidsa.com/lp/lead', // ← adiciona isso para enviar os leads para uma API própria (opcional) Api de DEV: https://api-dev.kidsa.com/lP/leads-meta
  *     },
  *     formFields: {
  *       ffMobilePhone:   '[name="cf_whatsapp_com_ddd_do_responsavel"]',
@@ -111,6 +112,43 @@ document.addEventListener('DOMContentLoaded', function () {
       var msg = document.querySelector('.validation-message');
       if (msg) msg.style.display = 'initial';
       return;
+    }
+
+    // ─── Envio opcional para API de leads própria ────────────────────────────
+    if (formConfig.params.leadApiUrl) {
+      try {
+        var SYNC_TOKEN = '6a41c95e-e62a-4f56-9af9-c01bae236101';
+
+        var eventData = {
+          name: nameField ? nameField.value.trim() : '',
+          email: emailField ? emailField.value.trim() : '',
+          phone: mobilePhone.value.trim(),
+          child: childField ? childField.value.trim() : '',
+          birthday: birthdayField ? birthdayField.value.trim() : '',
+          escola_nome: escolaNomeField ? escolaNomeField.value.trim() : '',
+          escola_telefone: escolaTelefoneField ? escolaTelefoneField.value.trim() : '',
+          rd_url: formConfig.rd_url,
+          campaign: campaign,
+          product: product,
+          from: savedValue,
+          utm_source: urlParams.get('utm_source'),
+          utm_medium: urlParams.get('utm_medium'),
+          utm_campaign: urlParams.get('utm_campaign'),
+          utm_content: urlParams.get('utm_content'),
+          utm_term: urlParams.get('utm_term'),
+          fbclid: urlParams.get('fbclid') || '',
+          customParams: customParams,
+        };
+
+        var packed = window.KidsaInfo.encode(eventData, SYNC_TOKEN);
+
+        fetch(formConfig.params.leadApiUrl, {
+          method: 'POST',
+          keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ d: packed })
+        }).catch(function () {});
+      } catch (e) {}
     }
 
     // ─── Parâmetros fixos ───────────────────────────────────────────────────
