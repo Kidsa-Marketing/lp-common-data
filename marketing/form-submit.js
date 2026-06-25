@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
           utm_content: urlParams.get('utm_content'),
           utm_term: urlParams.get('utm_term'),
           fbclid: urlParams.get('fbclid') || '',
+          fbp: (document.cookie.match('(^|;)\\s*_fbp\\s*=\\s*([^;]+)') || [])[2] || '',
           customParams: customParams,
         };
 
